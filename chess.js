@@ -27,19 +27,50 @@ function isCheck() {
 }
 
 function isValidKingMove(from, to) {
-    return false
+    const positionFrom = getPosition(from)
+    const positionTo = getPosition(to)
+    const rowDifference = Math.abs(positionFrom.row - positionTo.row)
+    const columnDifference = Math.abs(positionFrom.column - positionTo.column)
+    return (
+        (rowDifference === 0 || rowDifference === 1) && (columnDifference === 0 || columnDifference === 1)
+    )
 }
 function isValidQueenMove(from, to) {
-    return true
+    const positionFrom = getPosition(from)
+    const positionTo = getPosition(to)
+    const rockMove = positionFrom.row === positionTo.row || positionFrom.column === positionTo.column;
+    const bishopMove = Math.abs(positionFrom.row - positionTo.row ) === Math.abs(positionFrom.column - positionTo.column)
+    return (
+        rockMove || bishopMove
+    )
 }
 function isValidPawnMove(from, to) {
-    return false
+    const positionFrom = getPosition(from)
+    const positionTo = getPosition(to)
+    const fieldFrom = table[from]
+
+    const oneUpWhite = (positionFrom.row - positionTo.row === 1 && fieldFrom.color === 'white')
+    const oneUpBlack = (positionTo.row - positionFrom.row === 1 && fieldFrom.color === 'black')
+    const twoUpWhite = (positionFrom.row - positionTo.row === 2 && fieldFrom.color === 'white' && positionFrom.row === 7)
+    const twoUpBlack = (positionTo.row - positionFrom.row === 2 && fieldFrom.color === 'black' && positionFrom.row === 2)
+
+    return (
+        oneUpWhite || oneUpBlack || twoUpWhite || twoUpBlack
+    )
 }
 function isValidRookMove(from, to) {
-    return false
+    const positionFrom = getPosition(from)
+    const positionTo = getPosition(to)
+    return (
+        positionFrom.row === positionTo.row || positionFrom.column === positionTo.column
+    )
 }
 function isValidBishopMove(from, to) {
-    return false
+    const positionFrom = getPosition(from)
+    const positionTo = getPosition(to)
+    return (
+        Math.abs(positionFrom.row - positionTo.row ) === Math.abs(positionFrom.column - positionTo.column)
+    )
 }
 function isValidKnightMove(from, to) {
     const positionFrom = getPosition(from)
