@@ -1,15 +1,16 @@
 const pieces = {
-    pawn: { black: '♟', white: '♙' },
-    rook: { black: '♜', white: '♖' },
-    knight: { black: '♞', white: '♘' },
-    bishop: {black: '♝', white: '♗' },
-    queen: { black: '♛', white: '♕' },
-    king: { black: '♚', white: '♔' },
-  },
-  table = fenToPosition('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'),
-  //table = fenToPosition('bnbqkbnr/8/4p3/8/8/8/8/RNBQKBNR w KQkq - 0 1'),
-  selected = { from: -1, to: -1 },
-  moves = [];
+  pawn: { black: '♟', white: '♙' },
+  rook: { black: '♜', white: '♖' },
+  knight: { black: '♞', white: '♘' },
+  bishop: { black: '♝', white: '♗' },
+  queen: { black: '♛', white: '♕' },
+  king: { black: '♚', white: '♔' },
+};
+ const table = fenToPosition('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
+  // table = fenToPosition('bnbqkbnr/8/4p3/8/8/8/8/RNBQKBNR w KQkq - 0 1'),
+let  selected = { from: -1, to: -1 }
+ const moves = []
+ let isWhiteMove = true
 
 
 
