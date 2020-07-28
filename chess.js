@@ -20,6 +20,28 @@ function generateTable(fields) {
     html += '</table>'
 
     document.getElementById('table').innerHTML = html
+    if(isWhiteMove) generateInfoMessage("White player move") 
+    else generateInfoMessage("Black player move")
+}
+
+function generateInfoMessage(message){
+    document.getElementById('info').textContent = message
+}
+function generateErrorMessage(message){
+    document.getElementById('errors').textContent = message
+    setTimeout(() => document.getElementById('errors').textContent = '', 1000)
+}
+function generateAvailableMoves(piece,from){
+    let availableMoves = []
+    const positionFrom = getPosition(from)
+    if (piece==='pawn'){
+        for(position in table){
+            if (isValidPawnMove(positionFrom,position)){
+                availableMoves.push(position)
+            }
+        }
+    }
+    console.log(availableMoves)
 }
 
 function isCheck() {
@@ -49,8 +71,8 @@ function isValidPawnMove(from, to) {
     const positionTo = getPosition(to)
     const fieldFrom = table[from]
 
-    const oneUpWhite = (positionFrom.row - positionTo.row === 1 && fieldFrom.color === 'white')
-    const oneUpBlack = (positionTo.row - positionFrom.row === 1 && fieldFrom.color === 'black')
+    const oneUpWhite = (positionFrom.row - positionTo.row === 1 && fieldFrom.color === 'white' && positionFrom.column - positionTo.column === 0)
+    const oneUpBlack = (positionTo.row - positionFrom.row === 1 && fieldFrom.color === 'black' && positionFrom.column - positionTo.column === 0)
     const twoUpWhite = (positionFrom.row - positionTo.row === 2 && fieldFrom.color === 'white' && positionFrom.row === 7)
     const twoUpBlack = (positionTo.row - positionFrom.row === 2 && fieldFrom.color === 'black' && positionFrom.row === 2)
 
@@ -62,7 +84,7 @@ function isValidRookMove(from, to) {
     const positionFrom = getPosition(from)
     const positionTo = getPosition(to)
     return (
-        positionFrom.row === positionTo.row || positionFrom.column === positionTo.column
+        (positionFrom.row === positionTo.row && positionFrom.column !== positionTo.column) || (positionFrom.column === positionTo.column && positionTo.row !== positionTo.column)
     )
 }
 function isValidBishopMove(from, to) {
@@ -148,14 +170,16 @@ function tableClick(event) {
         if (selected.from === -1) {
             selected.from = index
         } else { // table
+            generateAvailableMoves(selected.from.piece,selected.from)
             if (isValidMove(selected.from, index)) {
                 table[index] = table[selected.from]
                 table[selected.from] = {}
                 selected = { from: -1, to: -1 }
-                generateTable(table)
                 isWhiteMove = !isWhiteMove
-            } else {
+                generateTable(table)
                 
+            } else {
+                generateErrorMessage("INVALID MOVE")
             }
         }
     }
