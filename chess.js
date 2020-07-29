@@ -43,8 +43,8 @@ function isValidPawnMove (from, to) {
 
   const oneUpWhite = (positionFrom.row - positionTo.row === 1 && fieldFrom.color === 'white' && Math.abs(positionFrom.column - positionTo.column) === 0)
   const oneUpBlack = (positionTo.row - positionFrom.row === 1 && fieldFrom.color === 'black' && Math.abs(positionFrom.column - positionTo.column) === 0)
-  const twoUpWhite = (positionFrom.row - positionTo.row === 2 && fieldFrom.color === 'white' && positionFrom.row === 7 && Math.abs(positionFrom.column - positionTo.column) === 0)
-  const twoUpBlack = (positionTo.row - positionFrom.row === 2 && fieldFrom.color === 'black' && positionFrom.row === 2 && Math.abs(positionFrom.column - positionTo.column) === 0)
+  const twoUpWhite = (positionFrom.row - positionTo.row === 2 && fieldFrom.color === 'white' && Math.abs(positionFrom.column - positionTo.column) === 0 && positionFrom.row === 7)
+  const twoUpBlack = (positionTo.row - positionFrom.row === 2 && fieldFrom.color === 'black' && Math.abs(positionFrom.column - positionTo.column) === 0 && positionFrom.row === 2)
 
   return oneUpWhite || oneUpBlack || twoUpWhite || twoUpBlack
 }
@@ -65,9 +65,9 @@ function isValidKnightMove (from, to) {
   const positionTo = getPosition(to)
   return (
     Math.abs(positionFrom.row - positionTo.row) === 2 &&
-        Math.abs(positionFrom.column - positionTo.column) === 1 ||
-        Math.abs(positionFrom.row - positionTo.row) === 1 &&
-        Math.abs(positionFrom.column - positionTo.column) === 2
+    Math.abs(positionFrom.column - positionTo.column) === 1 ||
+    Math.abs(positionFrom.row - positionTo.row) === 1 &&
+    Math.abs(positionFrom.column - positionTo.column) === 2
   )
 }
 
