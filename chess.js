@@ -18,9 +18,9 @@ function generateTable(fields) {
         html += '</tr>'
     }
     html += '</table>'
+
     document.getElementById('table').innerHTML = html
 }
-
 function isCheck() {
     return false // todo 
 }
@@ -30,18 +30,12 @@ function isValidKingMove(from, to) {
     const positionTo = getPosition(to)
     const rowDifference = Math.abs(positionFrom.row - positionTo.row)
     const columnDifference = Math.abs(positionFrom.column - positionTo.column)
-    return (
-        (rowDifference === 0 || rowDifference === 1) && (columnDifference === 0 || columnDifference === 1)
-    )
+    return (rowDifference === 0 || rowDifference === 1) && (columnDifference === 0 || columnDifference === 1)
 }
 function isValidQueenMove(from, to) {
     const positionFrom = getPosition(from)
     const positionTo = getPosition(to)
-    const rockMove = positionFrom.row === positionTo.row || positionFrom.column === positionTo.column;
-    const bishopMove = Math.abs(positionFrom.row - positionTo.row ) === Math.abs(positionFrom.column - positionTo.column)
-    return (
-        rockMove || bishopMove
-    )
+    return isValidBishopMove(from, to) || isValidRookMove(from, to)
 }
 function isValidPawnMove (from, to) {
   const positionFrom = getPosition(from)
