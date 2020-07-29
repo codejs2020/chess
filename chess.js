@@ -21,111 +21,135 @@ function generateTable(fields) {
 
     document.getElementById('table').innerHTML = html
 }
-
 function isCheck() {
     return false // todo 
 }
 
 function isValidKingMove(from, to) {
-    return false
-}
-function isValidQueenMove(from, to) {
-    return true
-}
-function isValidPawnMove(from, to) {
-    return false
-}
-function isValidRookMove(from, to) {
-    return false
-}
-function isValidBishopMove(from, to) {
-    return false
-}
-function isValidKnightMove(from, to) {
     const positionFrom = getPosition(from)
     const positionTo = getPosition(to)
-    return (
-        Math.abs(positionFrom.row - positionTo.row) === 2
-        && Math.abs(positionFrom.column - positionTo.column) === 1
-            ||
-        Math.abs(positionFrom.row - positionTo.row) === 1
-        && Math.abs(positionFrom.column - positionTo.column) === 2 
-    )
+    const rowDifference = Math.abs(positionFrom.row - positionTo.row)
+    const columnDifference = Math.abs(positionFrom.column - positionTo.column)
+    return (rowDifference === 0 || rowDifference === 1) && (columnDifference === 0 || columnDifference === 1)
+}
+function isValidQueenMove(from, to) {
+    const positionFrom = getPosition(from)
+    const positionTo = getPosition(to)
+    return isValidBishopMove(from, to) || isValidRookMove(from, to)
+}
+function isValidPawnMove (from, to) {
+  const positionFrom = getPosition(from)
+  const positionTo = getPosition(to)
+  const fieldFrom = table[from]
+
+  const oneUpWhite = (positionFrom.row - positionTo.row === 1 && fieldFrom.color === 'white' && Math.abs(positionFrom.column - positionTo.column) === 0)
+  const oneUpBlack = (positionTo.row - positionFrom.row === 1 && fieldFrom.color === 'black' && Math.abs(positionFrom.column - positionTo.column) === 0)
+  const twoUpWhite = (positionFrom.row - positionTo.row === 2 && fieldFrom.color === 'white' && Math.abs(positionFrom.column - positionTo.column) === 0 && positionFrom.row === 7)
+  const twoUpBlack = (positionTo.row - positionFrom.row === 2 && fieldFrom.color === 'black' && Math.abs(positionFrom.column - positionTo.column) === 0 && positionFrom.row === 2)
+
+  return oneUpWhite || oneUpBlack || twoUpWhite || twoUpBlack
+}
+function isValidRookMove(from, to) {
+  const positionFrom = getPosition(from)
+  const positionTo = getPosition(to)
+  return (
+      (positionFrom.row === positionTo.row && positionFrom.column !== positionTo.column) || (positionFrom.column === positionTo.column && positionTo.row !== positionTo.column)
+  )
+}
+function isValidBishopMove(from, to) {
+  const positionFrom = getPosition(from)
+  const positionTo = getPosition(to)
+  return (
+      Math.abs(positionFrom.row - positionTo.row ) === Math.abs(positionFrom.column - positionTo.column)
+  )
+}
+function isValidKnightMove(from, to) {
+  const positionFrom = getPosition(from)
+  const positionTo = getPosition(to)
+  return (
+      Math.abs(positionFrom.row - positionTo.row) === 2
+      && Math.abs(positionFrom.column - positionTo.column) === 1
+          ||
+      Math.abs(positionFrom.row - positionTo.row) === 1
+      && Math.abs(positionFrom.column - positionTo.column) === 2 
+  )
 }
 
 
 function getPosition(index) {
-    return {
-        row: Math.ceil(index/8),
-        column: index % 8 +1
-    }
+  return {
+      row: Math.ceil(index/8),
+      column: index % 8 +1
+  }
 }
 
 
 function isValidMove(from, to) {
-    let isValid = false
-    const fieldFrom = table[from]
-    const fieldTo = table[to]
-    
-    if (fieldFrom.piece) {
-        const piece = fieldFrom.piece
-        const color = fieldFrom.color
+  let isValid = false
+  const fieldFrom = table[from]
+  const fieldTo = table[to]
+  
+  if (fieldFrom.piece) {
+      const piece = fieldFrom.piece
+      const color = fieldFrom.color
 
-        if (fieldFrom.color === fieldTo.color) {
-            return false
-        }
+      if (fieldFrom.color === fieldTo.color) {
+          return false
+      }
 
-        if (fieldFrom.piece === 'knight') {
-            const isValid = isValidKnightMove(from, to)
-            console.log(isValid)
-            return isValid
-        }
-        if (fieldFrom.piece === 'bishop') {
-            return isValidBishopMove(from, to)
-        }
-        if (fieldFrom.piece === 'king') {
-            return isValidKingMove(from, to)
-        }
-        if (fieldFrom.piece === 'queen') {
-            return isValidQueenMove(from, to)
-        }
-        if (fieldFrom.piece === 'pawn') {
-            return isValidPawnMove(from, to)
-        }
-        if (fieldFrom.piece === 'rook') {
-            return isValidRookMove(from, to)
-        }
+      if (fieldFrom.piece === 'knight') {
+          const isValid = isValidKnightMove(from, to)
+          console.log(isValid)
+          return isValid
+      }
+      if (fieldFrom.piece === 'bishop') {
+          return isValidBishopMove(from, to)
+      }
+      if (fieldFrom.piece === 'king') {
+          return isValidKingMove(from, to)
+      }
+      if (fieldFrom.piece === 'queen') {
+          return isValidQueenMove(from, to)
+      }
+      if (fieldFrom.piece === 'pawn') {
+          return isValidPawnMove(from, to)
+      }
+      if (fieldFrom.piece === 'rook') {
+          return isValidRookMove(from, to)
+      }
 
-        if (isCheck()) {
-            
-        }
+      if (isCheck()) {
+          
+      }
 
-    } else {
-        return false
-    }
+  } else {
+      return false
+  }
 
-    return isValid
+  return isValid
 }
 
 
 document.getElementById('table').addEventListener('click', tableClick)
 
 function tableClick(event) {
-    if (event.target.tagName === 'TD') {
-        const index = event.target.dataset.index
-        console.log(index, selected)
-        if (selected.from === -1) {
-            selected.from = index
-        } else { // table
-            if (isValidMove(selected.from, index)) {
-                table[index] = table[selected.from]
-                table[selected.from] = {}
-                selected = { from: -1, to: -1 }
-                generateTable(table)
-                isWhiteMove = !isWhiteMove
-            } else {
-                
-            }
-        }
-    }
+  if (event.target.tagName === 'TD') {
+      const index = event.target.dataset.index
+      console.log(index, selected)
+      if (selected.from === -1) {
+          selected.from = index
+      } else { // table
+          generateAvailableMoves(selected.from.piece,selected.from)
+          if (isValidMove(selected.from, index)) {
+              table[index] = table[selected.from]
+              table[selected.from] = {}
+              selected = { from: -1, to: -1 }
+              isWhiteMove = !isWhiteMove
+              generateTable(table)
+              
+          } else {
+              generateErrorMessage("INVALID MOVE")
+          }
+      }
+  }
 }
