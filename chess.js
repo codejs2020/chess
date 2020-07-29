@@ -1,40 +1,70 @@
 console.log(table)
 generateTable(table)
 
-function generateTable (fields) {
-  let html = '<table>'
-  let index = 0
-  for (let i = 0; i < 8; i++) {
-    html += '<tr>'
-    for (let j = 0; j < 8; j++) {
-      const field = fields[index]
-      const piece = field.piece
-      const color = field.color
-      let fieldColor = index % 2 ? 'black' : 'white'
-      if (i % 2 === 1)fieldColor = index % 2 ? 'white' : 'black'
-      html += `<td data-index='${index}' class='${fieldColor}'>${piece ? pieces[piece][color] : ''}</td>`
-      ++index
+function generateTable(fields) {
+    let html = '<table>'
+    let index = 0
+    for (let i = 0; i < 8; i++) {
+        html += '<tr>'
+        for (let j = 0; j < 8; j++) {
+            const field = fields[index]
+            const piece = field.piece
+            const color = field.color
+            let fieldColor = index % 2 ? 'black' : 'white'
+            if(i%2===1)fieldColor = index % 2 ? 'white' : 'black'
+            html += `<td data-index='${index}' class='${fieldColor}'>${piece ? pieces[piece][color] : ''}</td>`
+            ++index
+        }
+        html += '</tr>'
     }
-    html += '</tr>'
-  }
-  html += '</table>'
+    html += '</table>'
 
-  document.getElementById('table').innerHTML = html
+    document.getElementById('table').innerHTML = html
+    if(isWhiteMove) generateInfoMessage("White player move") 
+    else generateInfoMessage("Black player move")
 }
 
-function isCheck () {
-  return false // todo
+function generateInfoMessage(message){
+    document.getElementById('info').textContent = message
+}
+function generateErrorMessage(message){
+    document.getElementById('errors').textContent = message
+    setTimeout(() => document.getElementById('errors').textContent = '', 1000)
+}
+function generateAvailableMoves(piece,from){
+    let availableMoves = []
+    const positionFrom = getPosition(from)
+    if (piece==='pawn'){
+        for(position in table){
+            if (isValidPawnMove(positionFrom,position)){
+                availableMoves.push(position)
+            }
+        }
+    }
+    console.log(availableMoves)
 }
 
-function isValidKingMove (from, to) {
-  const positionFrom = getPosition(from)
-  const positionTo = getPosition(to)
-  const rowDifference = Math.abs(positionFrom.row - positionTo.row)
-  const columnDifference = Math.abs(positionFrom.column - positionTo.column)
-  return (rowDifference === 0 || rowDifference === 1) && (columnDifference === 0 || columnDifference === 1)
+function isCheck() {
+    return false // todo 
 }
-function isValidQueenMove (from, to) {
-  return isValidBishopMove(from, to) || isValidRookMove(from, to)
+
+function isValidKingMove(from, to) {
+    const positionFrom = getPosition(from)
+    const positionTo = getPosition(to)
+    const rowDifference = Math.abs(positionFrom.row - positionTo.row)
+    const columnDifference = Math.abs(positionFrom.column - positionTo.column)
+    return (
+        (rowDifference === 0 || rowDifference === 1) && (columnDifference === 0 || columnDifference === 1)
+    )
+}
+function isValidQueenMove(from, to) {
+    const positionFrom = getPosition(from)
+    const positionTo = getPosition(to)
+    const rockMove = positionFrom.row === positionTo.row || positionFrom.column === positionTo.column;
+    const bishopMove = Math.abs(positionFrom.row - positionTo.row ) === Math.abs(positionFrom.column - positionTo.column)
+    return (
+        rockMove || bishopMove
+    )
 }
 function isValidPawnMove (from, to) {
   const positionFrom = getPosition(from)
