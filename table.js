@@ -8,9 +8,9 @@ const pieces = {
 }
 const table = fenToPosition('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
 // table = fenToPosition('bnbqkbnr/8/4p3/8/8/8/8/RNBQKBNR w KQkq - 0 1'),
-const selected = { from: -1, to: -1 }
+let selected = { from: -1, to: -1 }
 const moves = []
-const isWhiteMove = true
+let isWhiteMove = true
 
 function fenToPosition (fen) {
   const tmp = []

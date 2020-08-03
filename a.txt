@@ -1,0 +1,5 @@
+function ​isFullAge6(​limit​, ...​years​) {     
+    ​years​.forEach(​cur ​=> ​console​.log((​2016 ​- ​cur​) >= ​limit​)); 
+} 
+const n = [​16​, ​1990​, ​1999​, ​1965​, ​2016​, ​1987]
+isFullAge6(...n​); 
